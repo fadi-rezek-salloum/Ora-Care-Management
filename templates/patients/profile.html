@@ -1,0 +1,152 @@
+{% extends '_base.html' %}
+
+{% load widget_tweaks %}
+{% load mathfilters %}
+
+{% block content %}
+
+<h1>Patient's Profile</h1>
+
+<form method="post" enctype="multipart/form-data" class="w-100">
+    {% csrf_token %}
+
+    {% for field in form %}
+    {% if field.label == 'Name' %}
+
+    <i class="uil uil-user login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" value=patient.name %}
+
+    <p class="mt-3">
+        <i class="uil uil-calendar-alt login__form-icon"></i>
+        Appointment(s)
+    </p>
+    <p class="form-text">
+        You can click on appointments below to edit them.
+    </p>
+
+    <div class="row my-2">
+        {% for appointment in appointments %}
+        <div class="col-lg-3 col-xs-6 mb-2">
+            <a
+                href="{% url 'update-appointment' appointment.get_reservation_year appointment.get_reservation_month appointment.get_reservation_day appointment.id %}">
+                <div class="card text-center bg-primary text-white">
+                    {{ appointment.reservation_date }}
+                    -
+                    {{ appointment.reservation_time }}
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-sm-6">
+            <a
+                href="{% url 'update-appointment' appointment.get_reservation_year appointment.get_reservation_month appointment.get_reservation_day appointment.id %}">
+                <div class="card text-center bg-primary text-white">
+                    {{ appointment.reservation_date }}
+                    -
+                    {{ appointment.reservation_time }}
+                </div>
+            </a>
+        </div>
+
+
+
+        {% endfor %}
+    </div>
+
+    {% elif field.label == 'Gender' %}
+
+    <i class="uil uil-mars login__form-icon"></i>
+    {{ field.label }}
+    <br>
+
+    <select name="gender" class="form-select" aria-label="gender">
+        <option disabled {% if not field.value %}selected{% endif %}>Select Gender...</option>
+        <option {% if field.value == 'male' %}selected{% endif %} value="male">Male</option>
+        <option {% if field.value == 'female' %}selected{% endif %} value="female">Female</option>
+    </select>
+
+
+    {% elif field.label == 'Age' %}
+    <i class="uil uil-0-plus login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" %}
+
+    {% elif field.label == 'Phone' %}
+    <i class="uil uil-phone login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" %}
+
+    {% elif field.label == 'Medicens' %}
+    <i class="uil uil-prescription-bottle login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" rows=1 %}
+
+    {% elif field.label == 'Diseases' %}
+    <i class="uil uil-capsule login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" rows=1 %}
+
+    {% elif field.label == 'Treatment' %}
+    <i class="uil uil-medical-square login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" rows=1 %}
+
+    {% elif field.label == 'Allergy' %}
+    <i class="uil uil-tablets login__form-icon"></i>
+    {{ field.label }}
+    <br>
+    {% render_field field class="form-control" rows=1 %}
+
+
+    {% elif field.label == 'Bill' %}
+    <i class="uil uil-bill login__form-icon"></i>
+    {{ field.label }}
+    <small>S.P.</small>
+    <br>
+    {% render_field field class="form-control" %}
+
+    {% elif field.label == 'Payed' %}
+    <i class="uil uil-bill login__form-icon"></i>
+    {{ field.label }}
+    <small>S.P.</small>
+    <br>
+    {% render_field field class="form-control" %}
+
+    <br>
+
+    <div class="btn btn-primary mb-5 mt-3" style="padding: 10px 40px; cursur: initial;  ">Remaining:
+        {{ form.bill.value|sub:form.payed.value }} S.P.
+    </div>
+
+
+    {% endif %}
+    <br>
+    {% endfor %}
+
+    <div class="row d-flex justify-content-center gap-3">
+        <div class="col-lg-4 col-sm-12">
+            <button type="submit" class="btn btn-primary w-100">
+                Save
+                <i class="uil uil-save"></i>
+            </button>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+            <a href="{% url 'delete_patient' patient.pk %}" class="btn btn-danger w-100">
+                Delete Patient
+                <i class="uil uil-trash"></i>
+            </a>
+        </div>
+    </div>
+</form>
+
+<br>
+<br>
+
+{% endblock content %}

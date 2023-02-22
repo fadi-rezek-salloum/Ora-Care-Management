@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<section class="login">
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            {% if field.label == 'Username' %}
+                <i class="uil uil-user-circle login__form-icon"></i>
+            {% else %}
+                <i class="uil uil-key-skeleton login__form-icon"></i>
+            {% endif %}
+
+            {{ field.label }}
+
+            {{ field }}
+            <br>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</section>
+
+{% endblock content %}
